@@ -4,10 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "install": "npm install",
+    "postinstall": "npm install vite",
     "dev": "vite",
     "build": "run-p type-check \"build-only @{\"} --",
     "preview": "vite preview",
-    "build-only": "./node_modules/.bin/vite build",
+    "build-only": "npx vite build",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
