@@ -14,7 +14,6 @@ const { message } = storeToRefs(store)
       <div id="flashMessage" class="animate-fade" v-if="message">
         <h4>{{ message }}</h4>
       </div>
-      <h1>Deploy with Vecel</h1>
       <div class="wrapper">
         <HelloWorld msg="You did it!" />
 
