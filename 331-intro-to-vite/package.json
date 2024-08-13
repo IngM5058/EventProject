@@ -3,9 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
+    "preinstall": "rm -rf node_modules && npm install",
     "dev": "vite",
-    "build": "vue-tsc --build --force && vite build",
+    "build": "npx vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
