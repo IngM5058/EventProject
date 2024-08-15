@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { useMessageStore } from './stores/message';
-import { storeToRefs } from 'pinia';
+import { useMessageStore } from './stores/message'
+import { storeToRefs } from 'pinia'
+import { SpeedInsights } from '@vercel/speed-insights/vue';
 
 const store = useMessageStore()
 const { message } = storeToRefs(store)
 </script>
 
 <template>
-  <!-- <div id="layout"> -->
-  <div class="test-center font-sans test-gray-700 antialiased">
+  <SpeedInsights />
+  <div class="text-center font-sans text-gray-700 antialias">
     <header>
       <div id="flashMessage" class="animate-fade" v-if="message">
         <h4>{{ message }}</h4>
       </div>
-      <h1>Deploy with Vecel</h1>
       <div class="wrapper">
         <HelloWorld msg="You did it!" />
 
@@ -25,19 +25,12 @@ const { message } = storeToRefs(store)
         </nav>
       </div>
     </header>
-  <RouterView />
+    <RouterView />
   </div>
 </template>
 
 <style scoped>
 
-/* #layout {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-} */
 
 nav {
   padding: 30px;
@@ -45,15 +38,15 @@ nav {
 
 nav a {
   font-weight: bold;
-  color: #2c3e50
+  color: #2c3e50;
 }
 
 nav a.router-link-exact-active {
-  color: #42b983
+  color: #42b983;
 }
 
 h2 {
-  font-size:20px;
+  font-size: 20px;
 }
 
 @keyframes yellofade {
@@ -64,7 +57,7 @@ h2 {
     background-color: transparent;
   }
 }
-/* #flashMessage {
+#flashMessage {
   animation: yellofade 3s ease-in-out;
-} */
+}
 </style>

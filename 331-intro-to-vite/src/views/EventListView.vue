@@ -12,42 +12,41 @@ const props = defineProps({
     type: Number,
     required: true
   },
-  pageLimit: {
-    type: Array<number>,
+  eventsPerPage: {
+    type: Number,
     required: true
   }
 })
 onMounted(() => {
   watchEffect(() => {
-    EventService.getEvents(props.pageLimit[0], props.page)
-      .then((response: AxiosResponse<Event[]>) => {
+    EventService.getEvents(props.eventsPerPage, props.page).then(
+      (response: AxiosResponse<Event[]>) => {
         events.value = response.data
-        totalEvent.value = response.headers['x-total-count']
-      })
-      .catch((error) => {
-        console.error('There was an error!', error)
-      })
+        totalEvent.value = parseInt(response.headers['x-total-count'])
+      }
+    )
   })
 })
 const hasNextPage = computed(() => {
-  // calculate total page
-  const totalPages = props.pageLimit.length - 1
-  return props.page.valueOf() < totalPages
+  const totalPages = Math.ceil(totalEvent.value / props.eventsPerPage)
+  return props.page < totalPages && events.value.length > 0
 })
 </script>
 
 <template>
   <h1>Event for good</h1>
   <!--new element-->
-  <div class="flex flex-col items-center">
+  <div class="flex flex-col items-center justify-center">
     <EventCard v-for="event in events" :key="event.id" :event="event"></EventCard>
     <EventInfo v-for="event in events" :key="event.id" :event="event"></EventInfo>
-    <div class="flex w-[290px]">
+    <div class="pagination">
       <RouterLink
         :to="{ name: 'event-list-view', query: { page: page - 1 } }"
         rel="prev"
         v-if="page != 1"
-        class="flex-1 no-underline text-[#2c3e50] text-left"
+        id="page-prev"
+        class="float-left"
+
       >
         Prev Page</RouterLink
       >
@@ -55,10 +54,29 @@ const hasNextPage = computed(() => {
         :to="{ name: 'event-list-view', query: { page: page + 1 } }"
         rel="next"
         v-if="hasNextPage"
-        class="flex-1 no-underline text-[#2c3e50] text-right"
+        id="page-next"
+        class="float-right"
       >
         Next Page</RouterLink
       >
     </div>
   </div>
 </template>
+
+<style scoped>
+.panigation {
+  display: flex;
+  width: 290px;
+}
+.panigation a {
+  flex: 1;
+  text-decoration: none;
+  color: #2c3e50;
+}
+#page-prev {
+  text-align: left;
+}
+#page-next {
+  text-align: right;
+}
+</style>
