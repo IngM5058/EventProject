@@ -1,17 +1,18 @@
-// router/index.ts
 import { createRouter, createWebHistory } from 'vue-router'
 import EventListView from '@/views/EventListView.vue'
 import AboutView from '@/views/AboutView.vue'
-import StudentListView from '@/views/StudentListView.vue'
-import EventDetailView from '@/views/event/EventDetailView.vue'
-import EventEditView from '@/views/event/EventEditView.vue'
-import EventRegisterView from '@/views/event/EventRegisterView.vue'
-import EventLayoutView from '@/views/event/EventLayoutView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
-import NetworkErrorView from '@/views/NetworkErrorView.vue'
+
+import EventDetailView from '@/views/event/DetailView.vue'
+import EventRegisterView from '@/views/event/RegisterView.vue'
+import EventEditView from '@/views/event/EditView.vue'
+import EventLayoutView from '@/views/event/LayoutView.vue'
+import AddEventView from '@/views/event/EventFormView.vue'
+
+import StudentListView from '@/views/StudentListView.vue'
 import nProgress from 'nprogress'
-import EventService from '@/services/EventService'
 import { useEventStore } from '@/stores/event'
+import EventService from '@/services/EventService'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,41 +21,28 @@ const router = createRouter({
       path: '/',
       name: 'event-list-view',
       component: EventListView,
-      props: (route) => ({
-        page: parseInt((route.query?.page as string) || '1'),
-        eventsPerPage: 3
-      })
+      props: (route) => ({ page: parseInt(route.query.page?.toString() || '1') })
     },
-    {
-      path: '/about',
-      name: 'about',
-      component: AboutView
-    },
-    {
-      path: '/student',
-      name: 'student',
-      component: StudentListView
-    },
-    {
-      path: '/event/:id',
-      name: 'event-layout-view',
-      component: EventLayoutView,
-      props: true,
-      beforeEnter: (to) => {
-        const id = parseInt(to.params.id as string)
-        const eventStore = useEventStore()
-        return EventService.getEventById(id)
-          .then((response) => {
-            eventStore.setEvent(response.data)
+      {
+        path: '/event/:id',
+        name: 'event-layout-view',
+        component: EventLayoutView,
+        props: true,
+        beforeEnter: (to) => {
+          const id = parseInt(to.params.id as string)
+          const eventStore = useEventStore()
+          return EventService.getEvent(id)
+          .then((Response) => {
+            eventStore.setEvent(Response.data)
           })
           .catch((error) => {
-            if (error.response && error.response.status === 404) {
+            if (error.Response && error.response.status === 404) {
               return {
                 name: '404-resource-view',
-                params: { resoure: 'event' }
+                params: { resource: 'event' }
               }
-            } else {
-              return { name: 'network-error-view' }
+            }else {
+              return { name: 'network-error-view'}
             }
           })
       },
@@ -66,34 +54,32 @@ const router = createRouter({
           props: true
         },
         {
-          path: 'edit',
-          name: 'event-edit-view',
-          props: true,
-          component: EventEditView
-        },
-        {
           path: 'register',
           name: 'event-register-view',
-          props: true,
-          component: EventRegisterView
+          component: EventRegisterView,
+          props: true
+        },
+        {
+          path: 'edit',
+          name: 'event-edit-view',
+          component: EventEditView,
+          props: true
         }
       ]
     },
     {
-      path: '/event/:id/edit',
-      name: 'event-edit',
-      props: true,
-      component: EventEditView
+      path: '/about',
+      name: 'about',
+      component: AboutView
     },
     {
-      path: '/event/:id/register',
-      name: 'event-register',
-      props: true,
-      component: EventRegisterView
+      path: '/add-event',
+      name: 'add-event',
+      component: AddEventView
     },
     {
       path: '/404/:resource',
-      name: '404-resource',
+      name: '404-resource-view',
       component: NotFoundView,
       props: true
     },
@@ -103,25 +89,26 @@ const router = createRouter({
       component: NotFoundView
     },
     {
-      path: '/network-error',
-      name: 'network-error',
-      component: NetworkErrorView
+      path: '/Student',
+      name: 'student',
+      component: StudentListView
     }
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
-    } else {
-      return { top: 0 }
+    }else {
+    return { top: 0 }
     }
   }
 })
+
 router.beforeEach(() => {
   nProgress.start()
 })
 
 router.afterEach(() => {
-  nProgress.done()
+  nProgress.done
 })
 
 export default router
