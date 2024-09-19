@@ -1,21 +1,19 @@
-import axios, { type AxiosResponse } from 'axios'
-import type { Event } from '@/type'
+import axios from 'axios'
 
 const apiClient = axios.create({
-  baseURL: 'https://my-json-server.typicode.com/t1ww/lab02-mock-server/',
-  withCredentials: false,
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json'
-  }
+    baseURL: import.meta.env.VITE_BACKEND_URL,
+    withCredentials: false,
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+    }
 })
 
 export default {
-  getEvents(perPage: Number, page: Number): Promise<AxiosResponse<Event[]>> {
-    return apiClient.get<Event[]>(`/events?_limit=${perPage}&_page=${page}`)
-  },
-
-  getEventById(id: Number): Promise<AxiosResponse<Event>> {
-    return apiClient.get<Event>(`/events/${id}`)
-  }
+    getEvents(perPage: Number, page: Number) {
+        return apiClient.get('/events?_limit=' + perPage + '&_page=' + page)
+    },
+    getEvent(id: number) {
+      return apiClient.get('/events/' + id)
+    }
 }
