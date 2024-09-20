@@ -1,4 +1,4 @@
-import {type Organizer } from './../types';
+import type { Organizer } from '@/types'
 import axios from 'axios'
 
 const apiClient = axios.create({
@@ -18,6 +18,6 @@ export default {
       return apiClient.get('/organizers/' + id)
     },
     saveOrganizer(organizer: Organizer) {
-        return apiClient.post('/organiers', organizer)
+        return apiClient.post('/organizers', organizer)
     }
 }

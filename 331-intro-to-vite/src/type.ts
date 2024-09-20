@@ -27,9 +27,9 @@ export interface EventState {
 }
 
 export interface Organizer {
-  id: number
-  organizationName: string
-  address: string
+  id: number;
+  organizationName: string;
+  address: string;
 }
 
 export interface OrganizerState {
